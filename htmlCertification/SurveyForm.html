@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <h1 id="title">Survey Form</h1>
+  <p id="description">this is survey about your education fee.</p>
+  <form id="survey-form">
+    <div>
+      <label id="name-label" for="name">Name</label>
+      <input id="name" type="text" placeholder="your name" required>
+    </div>
+    <div>
+      <label id="email-label" for="email">Email</label>
+      <input id="email" type="email" placeholder="your email" required>
+    </div>
+    <div>
+      <label id="number-label" for="number">Phone number</label>
+      <input id="number" type="number" min="0" max="10000000" placeholder="your phone number">
+    </div>
+    <select id="dropdown">
+      <option>100</option>
+      <option>200</option>
+    </select>
+    <input type="radio" value="primary" name="education">
+    <input type="radio" value="secondary" name="education">
+    <input type="checkbox" value="graduate">
+    <input type="checkbox" value="post_graduate">
+    <textarea></textarea>
+    <button id="submit" type="submit">Submit</button>
+  </form>
+
+</body>
+
+</html>
