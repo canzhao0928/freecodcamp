@@ -1,60 +1,81 @@
 import { useState } from "react";
 
 export default function Calculator() {
-  const [formula, setFormula] = useState("123");
-  const [lastNum, setLastNum] = useState("");
+  const [formula, setFormula] = useState("0");
+  const [lastNum, setLastNum] = useState("0");
   const handleClear = () => {
-    setFormula("");
+    setFormula("0");
+    setLastNum("");
+  };
+  const checkLastOperator = (str) => {
+    //if the last element is an operator, delete it
+    const array = str.split("");
+    while (
+      array[array.length - 1] === "+" ||
+      array[array.length - 1] === "-" ||
+      array[array.length - 1] === "*" ||
+      array[array.length - 1] === "/"
+    ) {
+      array.pop();
+    }
+    return array.join("");
   };
 
   const handleClick = (e) => {
-    if (
-      e.target.innerText === "+" ||
-      e.target.innerText === "-" ||
-      e.target.innerText === "*" ||
-      e.target.innerText === "/"
-    ) {
-      setLastNum("");
-    } else {
-      setLastNum(lastNum + e.target.innerText);
-    }
-    if (e.target.innerText === "." && lastNum.includes(".")) {
-      return;
-    }
-    setFormula(formula + e.target.innerText);
-  };
-  const handleCal = () => {
-    const nums = formula.split(/[+|*|/|-]/).filter((num) => num !== "");
-    let operator = formula.split(/[0-9|.]+/).filter((op) => op !== "");
-
-    operator = operator.map((op) => {
-      if (op.length > 1) {
-        console.log("in");
-        op = op.slice(op.length - 1);
-        console.log(op);
-      }
-      return op;
-    });
-    console.log(nums);
-    console.log(operator);
-    let newFormula = "";
-    for (let i = 0; i < nums.length; i++) {
-      if (nums.length === operator.length) {
-        newFormula += operator[i] + nums[i];
-      } else {
-        if (i === nums.length - 1) {
-          newFormula += nums[i];
+    if (formula === "0") {
+      if (
+        e.target.innerText === "+" ||
+        e.target.innerText === "-" ||
+        e.target.innerText === "*" ||
+        e.target.innerText === "/" ||
+        e.target.innerText === "."
+      ) {
+        if (e.target.innerText === ".") {
+          setLastNum("0.");
         } else {
-          newFormula += nums[i] + operator[i];
+          setLastNum("");
+        }
+        setFormula(formula + e.target.innerText);
+      } else {
+        setFormula(e.target.innerText);
+        setLastNum(e.target.innerText);
+      }
+    } else {
+      if (
+        e.target.innerText === "+" ||
+        e.target.innerText === "*" ||
+        e.target.innerText === "/"
+      ) {
+        setLastNum("");
+        const str = checkLastOperator(formula) + e.target.innerText;
+        setFormula(str);
+      } else if (e.target.innerText === "-") {
+        const array = formula.split("");
+        if (array[array.length - 1] !== "-") {
+          setFormula(formula + e.target.innerText);
+          setLastNum("");
+        }
+      } else if (e.target.innerText === "." && lastNum.includes(".")) {
+        return;
+      } else {
+        if (lastNum === "0" && e.target.innerText === "0") {
+          setFormula(formula);
+          setLastNum("0");
+        } else {
+          setFormula(formula + e.target.innerText);
+          setLastNum(lastNum + e.target.innerText);
         }
       }
     }
+  };
+  const handleCal = () => {
+    const newFormula = checkLastOperator(formula);
     let result = eval(newFormula);
     const str = String(result);
     if (str.includes(".") && str.split(".")[1].length > 4) {
       result = result.toFixed(4);
     }
-    setFormula(result);
+    setFormula(String(result));
   };
   return (
     <div className="container mt-5" style={{ width: "600px" }}>
